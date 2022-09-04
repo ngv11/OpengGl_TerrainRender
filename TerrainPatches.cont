@@ -1,0 +1,33 @@
+#version 400
+
+layout(vertices = 4) out;
+
+uniform vec3 cameraPos;
+
+void main()
+{
+    gl_out[gl_InvocationID].gl_Position
+      = gl_in[gl_InvocationID].gl_Position;
+
+    vec4 average                = (gl_in[0].gl_Position + gl_in[1].gl_Position + gl_in[2].gl_Position + gl_in[3].gl_Position) / 4;
+
+    float distance_to_camera    = distance(cameraPos, average.xyz);
+
+    float d_max                 = 90;
+    float d_min                 = 0;
+
+    float level_low             = 30;
+    float level_high            = 100;
+ 
+    float Level                 = (((distance_to_camera - d_min) / (d_max - d_min)) * (level_low - level_high)) + level_high;
+
+    gl_TessLevelOuter[0]        = Level;
+    gl_TessLevelOuter[1]        = Level;
+    gl_TessLevelOuter[2]        = Level;
+    gl_TessLevelOuter[3]        = Level;
+    gl_TessLevelInner[0]        = Level;
+    gl_TessLevelInner[1]        = Level;
+
+   
+}
+
